@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.ecolim.AlertaMLService; // ← NUEVO
 import com.example.ecolim.R;
 import com.example.ecolim.database.EcolimDbHelper;
 import com.example.ecolim.models.Registro;
@@ -99,7 +100,6 @@ public class RegistroFragment extends Fragment {
     }
 
     private void configurarDropdowns() {
-        // Tipos de residuo desde base de datos
         listaResiduos = db.obtenerTodosResiduos();
         List<String> nombres = new ArrayList<>();
         for (Residuo r : listaResiduos) nombres.add(r.getNombre());
@@ -110,12 +110,10 @@ public class RegistroFragment extends Fragment {
                 nombres);
         ddTipoResiduo.setAdapter(adapterTipo);
 
-        // Al seleccionar tipo → mostrar categoría automáticamente
         ddTipoResiduo.setOnItemClickListener((parent, view, pos, id) -> {
             residuoSeleccionado = listaResiduos.get(pos);
             edtCategoria.setText(residuoSeleccionado.getCategoria());
 
-            // Color de fondo según peligrosidad
             int color;
             switch (residuoSeleccionado.getCategoria()) {
                 case "Peligroso":    color = 0xFFFFFDE7; break;
@@ -125,18 +123,15 @@ public class RegistroFragment extends Fragment {
             layoutCategoria.setBackgroundColor(color);
         });
 
-        // Unidades de medida
         String[] unidades = {"Kilogramos (kg)", "Litros (L)", "Toneladas (t)", "Unidades"};
         ddUnidad.setAdapter(new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, unidades));
 
-        // Zonas predefinidas
         ddUbicacion.setAdapter(new ArrayAdapter<>(requireContext(),
                 android.R.layout.simple_dropdown_item_1line, ZONAS));
     }
 
     private void configurarFechaHora() {
-        // Selector de fecha
         edtFecha.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
             new DatePickerDialog(requireContext(),
@@ -151,7 +146,6 @@ public class RegistroFragment extends Fragment {
                     .show();
         });
 
-        // Selector de hora
         edtHora.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
             new TimePickerDialog(requireContext(),
@@ -180,7 +174,7 @@ public class RegistroFragment extends Fragment {
     }
 
     private void guardarRegistro() {
-        // Validaciones
+        // ── Validaciones ─────────────────────────────────────────────────────
         if (residuoSeleccionado == null) {
             layoutTipo.setError("Seleccione el tipo de residuo");
             return;
@@ -227,11 +221,10 @@ public class RegistroFragment extends Fragment {
             return;
         }
 
-        // Obtener nombre del usuario
-        Usuario u = db.obtenerUsuarioPorId(usuarioId);
+        // ── Crear registro ───────────────────────────────────────────────────
+        Usuario u      = db.obtenerUsuarioPorId(usuarioId);
         String nombreU = u != null ? u.getNombreCompleto() : "Desconocido";
 
-        // Crear y guardar el registro
         Registro registro = new Registro(
                 usuarioId,
                 nombreU,
@@ -247,9 +240,15 @@ public class RegistroFragment extends Fragment {
                 ""
         );
 
+        // ── Guardar en base de datos ─────────────────────────────────────────
         long id = db.insertarRegistro(registro);
 
         if (id != -1) {
+            registro.setId(id); // asignar el id generado al registro
+
+            // ✅ ANÁLISIS ML — detecta exceso o peligrosidad y alerta WhatsApp
+            AlertaMLService.get(requireContext()).analizar(registro);
+
             Toast.makeText(requireContext(),
                     "Registro guardado exitosamente", Toast.LENGTH_SHORT).show();
             limpiarFormulario();
