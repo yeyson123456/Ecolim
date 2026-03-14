@@ -56,7 +56,6 @@ import java.util.Locale;
 
 public class ConfiguracionFragment extends Fragment {
 
-    // ── Constantes ────────────────────────────────────────────────────────────
     private static final String PREFS         = "ecolim_prefs";
     private static final String FOTO_FILENAME = "perfil_foto.jpg";
 
@@ -979,7 +978,6 @@ public class ConfiguracionFragment extends Fragment {
                 else f.delete();
             }
     }
-
     private void copiar(File src, File dst) throws Exception {
         try (InputStream  in  = new FileInputStream(src);
              OutputStream out = new FileOutputStream(dst)) {
