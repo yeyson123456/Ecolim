@@ -2,17 +2,27 @@ package com.example.ecolim.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import com.example.ecolim.AlertaMLService; // ← NUEVO
 import com.example.ecolim.R;
 import com.example.ecolim.database.EcolimDbHelper;
 import com.example.ecolim.models.Registro;
@@ -22,6 +32,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,34 +43,57 @@ import java.util.Locale;
 
 public class RegistroFragment extends Fragment {
 
-    private EcolimDbHelper    db;
-    private long              usuarioId;
-    private List<Residuo>     listaResiduos;
-    private Residuo           residuoSeleccionado;
+    private EcolimDbHelper db;
+    private long           usuarioId;
+    private List<Residuo>  listaResiduos;
+    private Residuo        residuoSeleccionado;
+
+    // Foto
+    private ImageView imgFotoResiduo;
+    private Uri       fotoUri;
+    private String    rutaFotoActual = "";
 
     // Campos del formulario
-    private TextInputLayout       layoutTipo, layoutCategoria, layoutCantidad,
+    private TextInputLayout      layoutTipo, layoutCategoria, layoutCantidad,
             layoutUnidad, layoutUbicacion, layoutFecha, layoutHora;
-    private AutoCompleteTextView  ddTipoResiduo, ddUnidad, ddUbicacion;
-    private TextInputEditText     edtCantidad, edtFecha, edtHora, edtObservaciones;
-    private TextInputEditText     edtCategoria;
-    private MaterialButton        btnGuardar, btnLimpiar;
+    private AutoCompleteTextView ddTipoResiduo, ddUnidad, ddUbicacion;
+    private TextInputEditText    edtCantidad, edtFecha, edtHora,
+            edtObservaciones, edtCategoria;
+    private MaterialButton       btnGuardar, btnLimpiar, btnCamara, btnGaleria;
 
-    // Zonas de trabajo predefinidas
     private static final String[] ZONAS = {
-            "Área de Producción",
-            "Área Administrativa",
-            "Almacén General",
-            "Almacén de Químicos",
-            "Comedor",
-            "Baños / Servicios Higiénicos",
-            "Estacionamiento",
-            "Área de Carga y Descarga",
-            "Laboratorio",
-            "Sala de Reuniones",
-            "Pasillo Principal",
-            "Otra zona"
+            "Área de Producción", "Área Administrativa", "Almacén General",
+            "Almacén de Químicos", "Comedor", "Baños / Servicios Higiénicos",
+            "Estacionamiento", "Área de Carga y Descarga", "Laboratorio",
+            "Sala de Reuniones", "Pasillo Principal", "Otra zona"
     };
+
+    // Launcher para cámara
+    private final ActivityResultLauncher<Uri> launcherCamara =
+            registerForActivityResult(new ActivityResultContracts.TakePicture(), exito -> {
+                if (exito && fotoUri != null) {
+                    imgFotoResiduo.setImageURI(fotoUri);
+                    rutaFotoActual = fotoUri.toString();
+                }
+            });
+
+    // Launcher para galería
+    private final ActivityResultLauncher<String> launcherGaleria =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    imgFotoResiduo.setImageURI(uri);
+                    rutaFotoActual = uri.toString();
+                    fotoUri = uri;
+                }
+            });
+
+    // Launcher para permiso de cámara
+    private final ActivityResultLauncher<String> launcherPermisoCamara =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
+                if (granted) abrirCamara();
+                else Toast.makeText(requireContext(),
+                        "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
+            });
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -97,6 +132,11 @@ public class RegistroFragment extends Fragment {
         edtCategoria     = v.findViewById(R.id.edt_categoria);
         btnGuardar       = v.findViewById(R.id.btn_guardar);
         btnLimpiar       = v.findViewById(R.id.btn_limpiar);
+
+        // Foto
+        imgFotoResiduo   = v.findViewById(R.id.img_foto_residuo);
+        btnCamara        = v.findViewById(R.id.btn_camara);
+        btnGaleria       = v.findViewById(R.id.btn_galeria);
     }
 
     private void configurarDropdowns() {
@@ -113,12 +153,11 @@ public class RegistroFragment extends Fragment {
         ddTipoResiduo.setOnItemClickListener((parent, view, pos, id) -> {
             residuoSeleccionado = listaResiduos.get(pos);
             edtCategoria.setText(residuoSeleccionado.getCategoria());
-
             int color;
             switch (residuoSeleccionado.getCategoria()) {
-                case "Peligroso":    color = 0xFFFFFDE7; break;
-                case "Especial":     color = 0xFFF3E5F5; break;
-                default:             color = 0xFFE8F5E9; break;
+                case "Peligroso": color = 0xFFFFFDE7; break;
+                case "Especial":  color = 0xFFF3E5F5; break;
+                default:          color = 0xFFE8F5E9; break;
             }
             layoutCategoria.setBackgroundColor(color);
         });
@@ -142,8 +181,7 @@ public class RegistroFragment extends Fragment {
                     },
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
-                    cal.get(Calendar.DAY_OF_MONTH))
-                    .show();
+                    cal.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         edtHora.setOnClickListener(v -> {
@@ -156,8 +194,7 @@ public class RegistroFragment extends Fragment {
                     },
                     cal.get(Calendar.HOUR_OF_DAY),
                     cal.get(Calendar.MINUTE),
-                    true)
-                    .show();
+                    true).show();
         });
     }
 
@@ -171,10 +208,45 @@ public class RegistroFragment extends Fragment {
     private void configurarBotones() {
         btnGuardar.setOnClickListener(v -> guardarRegistro());
         btnLimpiar.setOnClickListener(v -> limpiarFormulario());
+
+        btnCamara.setOnClickListener(v -> {
+            if (ContextCompat.checkSelfPermission(requireContext(),
+                    android.Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED) {
+                abrirCamara();
+            } else {
+                launcherPermisoCamara.launch(android.Manifest.permission.CAMERA);
+            }
+        });
+
+        btnGaleria.setOnClickListener(v -> launcherGaleria.launch("image/*"));
+    }
+
+    private void abrirCamara() {
+        try {
+            File foto = crearArchivoFoto();
+            fotoUri = FileProvider.getUriForFile(
+                    requireContext(),
+                    requireContext().getPackageName() + ".provider",
+                    foto);
+            launcherCamara.launch(fotoUri);
+        } catch (IOException e) {
+            Toast.makeText(requireContext(),
+                    "Error al abrir cámara", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private File crearArchivoFoto() throws IOException {
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        String nombre = "ECOLIM_" + timestamp;
+        File dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File foto = File.createTempFile(nombre, ".jpg", dir);
+        rutaFotoActual = foto.getAbsolutePath();
+        return foto;
     }
 
     private void guardarRegistro() {
-        // ── Validaciones ─────────────────────────────────────────────────────
         if (residuoSeleccionado == null) {
             layoutTipo.setError("Seleccione el tipo de residuo");
             return;
@@ -214,15 +286,13 @@ public class RegistroFragment extends Fragment {
 
         String fecha = txt(edtFecha);
         String hora  = txt(edtHora);
-
         if (fecha.isEmpty() || hora.isEmpty()) {
             Toast.makeText(requireContext(),
                     "Indique fecha y hora", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // ── Crear registro ───────────────────────────────────────────────────
-        Usuario u      = db.obtenerUsuarioPorId(usuarioId);
+        Usuario u = db.obtenerUsuarioPorId(usuarioId);
         String nombreU = u != null ? u.getNombreCompleto() : "Desconocido";
 
         Registro registro = new Registro(
@@ -237,18 +307,12 @@ public class RegistroFragment extends Fragment {
                 txt(edtObservaciones),
                 fecha,
                 hora,
-                ""
+                rutaFotoActual  // ← aquí se guarda la ruta de la foto
         );
 
-        // ── Guardar en base de datos ─────────────────────────────────────────
         long id = db.insertarRegistro(registro);
 
         if (id != -1) {
-            registro.setId(id); // asignar el id generado al registro
-
-            // ✅ ANÁLISIS ML — detecta exceso o peligrosidad y alerta WhatsApp
-            AlertaMLService.get(requireContext()).analizar(registro);
-
             Toast.makeText(requireContext(),
                     "Registro guardado exitosamente", Toast.LENGTH_SHORT).show();
             limpiarFormulario();
@@ -266,6 +330,9 @@ public class RegistroFragment extends Fragment {
         edtObservaciones.setText("");
         edtCategoria.setText("");
         residuoSeleccionado = null;
+        rutaFotoActual = "";
+        fotoUri = null;
+        imgFotoResiduo.setImageResource(android.R.drawable.ic_menu_camera);
         layoutCategoria.setBackgroundColor(0x00000000);
         setFechaHoraActual();
         layoutTipo.setError(null);

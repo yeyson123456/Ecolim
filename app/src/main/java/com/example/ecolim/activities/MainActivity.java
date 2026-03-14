@@ -8,6 +8,9 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.biometric.BiometricManager;
+import androidx.biometric.BiometricPrompt;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.ecolim.R;
@@ -19,6 +22,8 @@ import com.example.ecolim.fragments.RegistroFragment;
 import com.example.ecolim.fragments.ReportesFragment;
 import com.example.ecolim.models.Usuario;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.concurrent.Executor;
 
 public class MainActivity extends BaseActivity {
 
@@ -33,7 +38,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void attachBaseContext(Context base) {
         SharedPreferences prefs = base.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        int nivel = prefs.getInt("font_size", 2); // 0=muy pequeño, 2=normal, 4=muy grande
+        int nivel = prefs.getInt("font_size", 2);
 
         float[] escalas = {0.75f, 0.875f, 1.0f, 1.15f, 1.3f};
         float escala = (nivel >= 0 && nivel < escalas.length) ? escalas[nivel] : 1.0f;
@@ -46,7 +51,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    
+
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         AppCompatDelegate.setDefaultNightMode(
                 prefs.getBoolean("modo_oscuro", false)
@@ -59,9 +64,12 @@ public class MainActivity extends BaseActivity {
         db        = EcolimDbHelper.getInstance(this);
         bottomNav = findViewById(R.id.bottom_navigation);
 
-        // Obtener usuario de Intent o SharedPreferences
+        // Si viene del login trae usuario_id en el intent
+        // Si viene del splash (sesión guardada) no trae nada
         usuarioId = getIntent().getLongExtra("usuario_id", -1);
-        if (usuarioId == -1) {
+        boolean vieneDeSesionGuardada = usuarioId == -1;
+
+        if (vieneDeSesionGuardada) {
             usuarioId = prefs.getLong(KEY_USER_ID, -1);
         }
 
@@ -76,13 +84,62 @@ public class MainActivity extends BaseActivity {
             return;
         }
 
-        // Mostrar HomeFragment por defecto
-        if (savedInstanceState == null) {
+        configurarNavegacion();
+
+        if (vieneDeSesionGuardada) {
+            pedirHuella();
+        } else {
+            if (savedInstanceState == null) {
+                cargarFragmento(new HomeFragment());
+                bottomNav.setSelectedItemId(R.id.nav_home);
+            }
+        }
+    }
+
+    private void pedirHuella() {
+        BiometricManager biometricManager = BiometricManager.from(this);
+
+        // Si el dispositivo no soporta huella, entra directo
+        if (biometricManager.canAuthenticate(BiometricManager.Authenticators.BIOMETRIC_STRONG)
+                != BiometricManager.BIOMETRIC_SUCCESS) {
             cargarFragmento(new HomeFragment());
             bottomNav.setSelectedItemId(R.id.nav_home);
+            return;
         }
 
-        // Listener de navegación
+        Executor executor = ContextCompat.getMainExecutor(this);
+
+        BiometricPrompt biometricPrompt = new BiometricPrompt(this, executor,
+                new BiometricPrompt.AuthenticationCallback() {
+
+                    @Override
+                    public void onAuthenticationSucceeded(BiometricPrompt.AuthenticationResult result) {
+                        cargarFragmento(new HomeFragment());
+                        bottomNav.setSelectedItemId(R.id.nav_home);
+                    }
+
+                    @Override
+                    public void onAuthenticationError(int errorCode, CharSequence errString) {
+                        // Canceló o error → volver al login
+                        cerrarSesion();
+                    }
+
+                    @Override
+                    public void onAuthenticationFailed() {
+                        // Huella no reconocida, puede intentar de nuevo automáticamente
+                    }
+                });
+
+        BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Ecolim")
+                .setSubtitle("Verifica tu identidad para continuar")
+                .setNegativeButtonText("Usar contraseña")
+                .build();
+
+        biometricPrompt.authenticate(promptInfo);
+    }
+
+    private void configurarNavegacion() {
         bottomNav.setOnItemSelectedListener(item -> {
             Fragment fragmento = null;
             int id = item.getItemId();
@@ -130,7 +187,6 @@ public class MainActivity extends BaseActivity {
         return usuarioId;
     }
 
-    // Cerrar sesión
     public void cerrarSesion() {
         getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
                 .edit()
@@ -148,5 +204,4 @@ public class MainActivity extends BaseActivity {
                 android.R.anim.fade_out);
         finish();
     }
-
 }
