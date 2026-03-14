@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- Ícono opcional (espacio reservado para alineación) -->
+    <ImageView
+        android:id="@+id/img_row_icono"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="16dp"
+        android:src="@android:drawable/btn_star_big_off"
+        android:visibility="gone" />
+
+    <!-- Espacio de alineación cuando no hay ícono -->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginEnd="0dp"
+        android:visibility="gone" />
+
+    <!-- Título + subtítulo -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txt_row_titulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Título"
+            android:textSize="15sp"
+            android:textColor="#1A1A1A" />
+
+        <TextView
+            android:id="@+id/txt_row_subtitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="#8E8E93"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Valor opcional (ej: "Verde ECOLIM", "⭐⭐⭐⭐⭐") -->
+    <TextView
+        android:id="@+id/txt_row_valor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="13sp"
+        android:textColor="#8E8E93"
+        android:layout_marginEnd="6dp"
+        android:visibility="gone" />
+
+    <!-- Flecha derecha -->
+    <ImageView
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_chevron_right"
+        android:alpha="0.4" />
+
+</LinearLayout>

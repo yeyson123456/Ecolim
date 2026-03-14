@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         VERDE ECOLIM — Tema principal
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="verde_primary">#2E7D32</color>
+    <color name="verde_dark">#1B5E20</color>
+    <color name="verde_secondary">#4CAF50</color>
+    <color name="verde_light">#A5D6A7</color>
+    <color name="verde_surface">#E8F5E9</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         AZUL CORPORATIVO
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="azul_primary">#1565C0</color>
+    <color name="azul_dark">#0D47A1</color>
+    <color name="azul_secondary">#42A5F5</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         NARANJA ENERGÉTICO
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="naranja_primary">#E65100</color>
+    <color name="naranja_dark">#BF360C</color>
+    <color name="naranja_secondary">#FF9800</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         GRIS PROFESIONAL
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="gris_primary">#455A64</color>
+    <color name="gris_dark">#263238</color>
+    <color name="gris_secondary">#78909C</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         COLORES GENERALES DE LA APP
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="blanco">#FFFFFF</color>
+    <color name="negro">#000000</color>
+    <color name="fondo_claro">#F2F2F7</color>
+    <color name="fondo_oscuro">#121212</color>
+    <color name="superficie_oscura">#1E1E1E</color>
+    <color name="texto_primario">#1A1A1A</color>
+    <color name="texto_secundario">#757575</color>
+    <color name="texto_hint">#BDBDBD</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="error">#D32F2F</color>
+    <color name="warning">#FF6B00</color>
+    <color name="success">#2E7D32</color>
+    <color name="info">#1565C0</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         SWITCH — color del track (selector en res/color/)
+         Se usa en: app:trackTint="@color/switch_track_color"
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="switch_track_on">#2E7D32</color>
+    <color name="switch_track_off">#BDBDBD</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         BADGES / INDICADORES
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="badge_verde_bg">#2E7D32</color>
+    <color name="badge_rojo_bg">#C62828</color>
+    <color name="badge_naranja_bg">#E65100</color>
+    <color name="badge_gris_bg">#546E7A</color>
+    <color name="circulo_verde">#43A047</color>
+    <color name="circulo_rojo">#E53935</color>
+    <color name="circulo_amarillo">#FFB300</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         RESIDUOS — colores por categoría NTP 900.058
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="residuo_organico">#4CAF50</color>
+    <color name="residuo_papel">#2196F3</color>
+    <color name="residuo_plastico">#FFEB3B</color>
+    <color name="residuo_vidrio">#00BCD4</color>
+    <color name="residuo_metal">#9E9E9E</color>
+    <color name="residuo_peligroso">#F44336</color>
+    <color name="residuo_electronico">#9C27B0</color>
+    <color name="residuo_sanitario">#FF5722</color>
+    <color name="residuo_construccion">#795548</color>
+    <color name="residuo_especial">#FF9800</color>
+    <color name="residuo_otro">#607D8B</color>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         TRANSPARENCIAS ÚTILES
+    ══════════════════════════════════════════════════════════════════ -->
+    <color name="negro_20">#33000000</color>
+    <color name="negro_40">#66000000</color>
+    <color name="negro_60">#99000000</color>
+    <color name="blanco_20">#33FFFFFF</color>
+    <color name="blanco_60">#99FFFFFF</color>
+    <color name="verde_primary_20">#332E7D32</color>
+
+</resources>

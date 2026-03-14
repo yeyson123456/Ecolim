@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F1F8E9">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1B5E20"
+            app:title="Reportes"
+            app:titleTextColor="#FFFFFF"
+            app:subtitle="Exportar Excel y PDF"
+            app:subtitleTextColor="#A5D6A7" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Filtros -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PERÍODO DEL REPORTE"
+                        android:textSize="11sp"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="12dp">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp"
+                            android:hint="Fecha inicio"
+                            app:boxStrokeColor="#2E7D32"
+                            app:hintTextColor="#2E7D32">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edt_fecha_inicio"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="Fecha fin"
+                            app:boxStrokeColor="#2E7D32"
+                            app:hintTextColor="#2E7D32">
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edt_fecha_fin"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="false"
+                                android:maxLines="1" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Filtrar por tipo"
+                        app:boxStrokeColor="#2E7D32"
+                        app:hintTextColor="#2E7D32">
+                        <AutoCompleteTextView
+                            android:id="@+id/dd_tipo_filtro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:focusable="false" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Botones generar / limpiar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_limpiar_reporte"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="Limpiar"
+                    android:textColor="#2E7D32"
+                    app:strokeColor="#2E7D32"
+                    app:cornerRadius="10dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_generar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Generar Reporte"
+                    android:textStyle="bold"
+                    app:backgroundTint="#2E7D32"
+                    app:cornerRadius="10dp" />
+
+            </LinearLayout>
+
+            <!-- Resultados -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_resultados"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#FFFFFF">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="RESUMEN DEL PERÍODO"
+                        android:textSize="11sp"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="8dp">
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical"
+                            android:gravity="center" android:background="#E8F5E9"
+                            android:padding="12dp" android:layout_marginEnd="6dp">
+                            <TextView android:id="@+id/txt_reporte_total"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="0" android:textSize="28sp" android:textStyle="bold"
+                                android:textColor="#2E7D32" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Registros" android:textSize="10sp" android:textColor="#555555" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical"
+                            android:gravity="center" android:background="#E3F2FD"
+                            android:padding="12dp" android:layout_marginStart="6dp">
+                            <TextView android:id="@+id/txt_reporte_kg"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="0 kg" android:textSize="22sp" android:textStyle="bold"
+                                android:textColor="#1565C0" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Total recolectado" android:textSize="10sp" android:textColor="#555555" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical"
+                            android:gravity="center" android:background="#FFEBEE"
+                            android:padding="10dp" android:layout_marginEnd="4dp">
+                            <TextView android:id="@+id/txt_reporte_peligrosos"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="0" android:textSize="20sp" android:textStyle="bold"
+                                android:textColor="#C62828" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Peligrosos" android:textSize="9sp" android:textColor="#555555" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical"
+                            android:gravity="center" android:background="#E8F5E9"
+                            android:padding="10dp" android:layout_marginStart="4dp"
+                            android:layout_marginEnd="4dp">
+                            <TextView android:id="@+id/txt_reporte_no_peligrosos"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="0" android:textSize="20sp" android:textStyle="bold"
+                                android:textColor="#2E7D32" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="No Peligrosos" android:textSize="9sp" android:textColor="#555555" />
+                        </LinearLayout>
+
+                        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content"
+                            android:layout_weight="1" android:orientation="vertical"
+                            android:gravity="center" android:background="#F3E5F5"
+                            android:padding="10dp" android:layout_marginStart="4dp">
+                            <TextView android:id="@+id/txt_reporte_especiales"
+                                android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="0" android:textSize="20sp" android:textStyle="bold"
+                                android:textColor="#6A1B9A" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                                android:text="Especiales" android:textSize="9sp" android:textColor="#555555" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DESGLOSE POR TIPO"
+                        android:textSize="11sp"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="8dp" />
+
+                    <LinearLayout
+                        android:id="@+id/layout_resultados"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Separador exportar -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#E0E0E0"
+                        android:layout_marginBottom="14dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="EXPORTAR REPORTE PROFESIONAL"
+                        android:textSize="11sp"
+                        android:textColor="#1565C0"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.1"
+                        android:layout_marginBottom="10dp" />
+
+                    <!-- Botón Excel -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_exportar_excel"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="Exportar a Excel (.xlsx)"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="#1B6B1B"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_historial"
+                        app:iconTint="#FFFFFF"
+                        app:iconSize="20dp" />
+
+                    <!-- Botón PDF -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_exportar_pdf"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:text="Exportar a PDF"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="#C62828"
+                        app:cornerRadius="12dp"
+                        app:icon="@drawable/ic_reporte"
+                        app:iconTint="#FFFFFF"
+                        app:iconSize="20dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

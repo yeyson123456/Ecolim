@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Pega este bloque dentro de tu res/values/styles.xml (o themes.xml)
+    DENTRO del tag <resources> que ya existe.
+-->
+<resources>
+
+    <!-- Estilo para los encabezados de sección tipo iOS -->
+    <style name="SectionHeader">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">28dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">24dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">#6D6D72</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+</resources>

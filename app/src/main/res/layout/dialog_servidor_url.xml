@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:hint="URL del servidor API"
+        app:boxStrokeColor="#2E7D32" app:hintTextColor="#2E7D32"
+        app:helperText="Ej: https://api.ecolim.pe/v1">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_servidor_url"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:inputType="textUri" android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>
