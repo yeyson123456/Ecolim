@@ -30,7 +30,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Tipo de residuo -->
+            <!-- TIPO DE RESIDUO -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +43,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -53,7 +52,6 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_tipo_residuo"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -70,9 +68,8 @@
                             android:inputType="none"
                             android:focusable="false"
                             android:textColor="#000000"
-                            android:textColorHint="#000000" />
+                            android:textColorHint="#555555" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_categoria"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -87,14 +84,12 @@
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:textColor="#000000"
-                            android:textColorHint="#000000"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Cantidad -->
+            <!-- CANTIDAD -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,7 +102,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -117,12 +111,10 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layout_cantidad"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -140,9 +132,8 @@
                                 android:inputType="numberDecimal"
                                 android:maxLines="1"
                                 android:textColor="#000000"
-                                android:textColorHint="#000000" />
+                                android:textColorHint="#555555" />
                         </com.google.android.material.textfield.TextInputLayout>
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layout_unidad"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -159,14 +150,13 @@
                                 android:inputType="none"
                                 android:focusable="false"
                                 android:textColor="#000000"
-                                android:textColorHint="#000000" />
+                                android:textColorHint="#555555" />
                         </com.google.android.material.textfield.TextInputLayout>
-
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Zona de recolección -->
+            <!-- ZONA -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -179,7 +169,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -189,7 +178,6 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_ubicacion"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -204,13 +192,12 @@
                             android:layout_height="wrap_content"
                             android:inputType="textCapWords"
                             android:textColor="#000000"
-                            android:textColorHint="#000000" />
+                            android:textColorHint="#555555" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Fecha y Hora -->
+            <!-- FECHA Y HORA -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,7 +210,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -233,12 +219,10 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layout_fecha"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -256,9 +240,8 @@
                                 android:focusable="false"
                                 android:maxLines="1"
                                 android:textColor="#000000"
-                                android:textColorHint="#000000" />
+                                android:textColorHint="#555555" />
                         </com.google.android.material.textfield.TextInputLayout>
-
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/layout_hora"
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -275,14 +258,13 @@
                                 android:focusable="false"
                                 android:maxLines="1"
                                 android:textColor="#000000"
-                                android:textColorHint="#000000" />
+                                android:textColorHint="#555555" />
                         </com.google.android.material.textfield.TextInputLayout>
-
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Observaciones -->
+            <!-- OBSERVACIONES -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -295,7 +277,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -305,7 +286,6 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
-
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
@@ -322,13 +302,12 @@
                             android:maxLines="5"
                             android:gravity="top"
                             android:textColor="#000000"
-                            android:textColorHint="#000000" />
+                            android:textColorHint="#555555" />
                     </com.google.android.material.textfield.TextInputLayout>
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Foto del residuo ← AHORA DENTRO DEL SCROLLVIEW -->
+            <!-- FOTO DEL RESIDUO -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -341,7 +320,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -352,49 +330,30 @@
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
 
+                    <!-- Imagen con borde redondeado -->
                     <ImageView
                         android:id="@+id/img_foto_residuo"
-                        android:layout_width="120dp"
-                        android:layout_height="120dp"
-                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginBottom="12dp"
                         android:scaleType="centerCrop"
                         android:background="#F5F5F5"
                         android:src="@android:drawable/ic_menu_camera"
-                        android:layout_marginBottom="12dp" />
+                        android:padding="40dp" />
 
-                    <LinearLayout
+                    <!-- Botón único que abre el diálogo opciones -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_foto"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:layout_height="48dp"
+                        android:text="Agregar foto"
+                        android:textColor="#2E7D32"
+                        app:strokeColor="#2E7D32"
+                        app:cornerRadius="10dp"
+                        app:icon="@android:drawable/ic_menu_camera"
+                        app:iconTint="#2E7D32" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_camara"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="Cámara"
-                            android:textColor="#2E7D32"
-                            app:strokeColor="#2E7D32"
-                            app:cornerRadius="10dp"
-                            app:icon="@android:drawable/ic_menu_camera"
-                            app:iconTint="#2E7D32" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btn_galeria"
-                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Galería"
-                            android:textColor="#2E7D32"
-                            app:strokeColor="#2E7D32"
-                            app:cornerRadius="10dp"
-                            app:icon="@android:drawable/ic_menu_gallery"
-                            app:iconTint="#2E7D32" />
-
-                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -413,7 +372,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_limpiar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
             android:text="Limpiar"
@@ -424,11 +383,12 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_guardar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="52dp"
             android:layout_weight="2"
             android:text="Guardar Registro"
             android:textSize="15sp"
             android:textStyle="bold"
+            android:textColor="#FFFFFF"
             app:backgroundTint="#2E7D32"
             app:cornerRadius="10dp"
             app:icon="@android:drawable/ic_menu_save"

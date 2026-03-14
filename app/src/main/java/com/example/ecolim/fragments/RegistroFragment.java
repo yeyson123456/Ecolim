@@ -1,14 +1,12 @@
 package com.example.ecolim.fragments;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +21,14 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
+import com.example.ecolim.AlertaMLService;
 import com.example.ecolim.R;
 import com.example.ecolim.database.EcolimDbHelper;
 import com.example.ecolim.models.Registro;
 import com.example.ecolim.models.Residuo;
 import com.example.ecolim.models.Usuario;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -48,18 +48,18 @@ public class RegistroFragment extends Fragment {
     private List<Residuo>  listaResiduos;
     private Residuo        residuoSeleccionado;
 
-    // Foto
+    // ── Foto ──────────────────────────────────────────────────────────────────
     private ImageView imgFotoResiduo;
-    private Uri       fotoUri;
-    private String    rutaFotoActual = "";
+    private Uri       uriFotoTemporal;
+    private String    rutaFotoGuardada = "";
 
-    // Campos del formulario
+    // ── Campos ────────────────────────────────────────────────────────────────
     private TextInputLayout      layoutTipo, layoutCategoria, layoutCantidad,
             layoutUnidad, layoutUbicacion, layoutFecha, layoutHora;
     private AutoCompleteTextView ddTipoResiduo, ddUnidad, ddUbicacion;
     private TextInputEditText    edtCantidad, edtFecha, edtHora,
             edtObservaciones, edtCategoria;
-    private MaterialButton       btnGuardar, btnLimpiar, btnCamara, btnGaleria;
+    private MaterialButton       btnGuardar, btnLimpiar, btnFoto;
 
     private static final String[] ZONAS = {
             "Área de Producción", "Área Administrativa", "Almacén General",
@@ -68,50 +68,60 @@ public class RegistroFragment extends Fragment {
             "Sala de Reuniones", "Pasillo Principal", "Otra zona"
     };
 
-    // Launcher para cámara
+    // ══════════════════════════════════════════════════════════════════════════
+    //  LAUNCHERS (registrar antes de onCreateView)
+    // ══════════════════════════════════════════════════════════════════════════
+
     private final ActivityResultLauncher<Uri> launcherCamara =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), exito -> {
-                if (exito && fotoUri != null) {
-                    imgFotoResiduo.setImageURI(fotoUri);
-                    rutaFotoActual = fotoUri.toString();
+                if (exito && uriFotoTemporal != null) {
+                    rutaFotoGuardada = uriFotoTemporal.toString();
+                    mostrarFoto(uriFotoTemporal);
+                    toast("Foto capturada");
                 }
             });
 
-    // Launcher para galería
     private final ActivityResultLauncher<String> launcherGaleria =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
-                    imgFotoResiduo.setImageURI(uri);
-                    rutaFotoActual = uri.toString();
-                    fotoUri = uri;
+                    try {
+                        requireContext().getContentResolver().takePersistableUriPermission(
+                                uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    } catch (Exception ignored) {}
+                    rutaFotoGuardada = uri.toString();
+                    mostrarFoto(uri);
+                    toast("Foto seleccionada");
                 }
             });
 
-    // Launcher para permiso de cámara
-    private final ActivityResultLauncher<String> launcherPermisoCamara =
-            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
-                if (granted) abrirCamara();
-                else Toast.makeText(requireContext(),
-                        "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
+    private final ActivityResultLauncher<String> launcherPermiso =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), ok -> {
+                if (ok) abrirCamara();
+                else toast("Permiso de cámara denegado");
             });
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  LIFECYCLE
+    // ══════════════════════════════════════════════════════════════════════════
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_registro, container, false);
-
         db        = EcolimDbHelper.getInstance(requireContext());
         usuarioId = getArguments() != null
                 ? getArguments().getLong("usuario_id", -1) : -1;
-
         iniciarVistas(view);
         configurarDropdowns();
         configurarFechaHora();
         configurarBotones();
         setFechaHoraActual();
-
         return view;
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  VISTAS
+    // ══════════════════════════════════════════════════════════════════════════
 
     private void iniciarVistas(View v) {
         layoutTipo       = v.findViewById(R.id.layout_tipo_residuo);
@@ -121,7 +131,6 @@ public class RegistroFragment extends Fragment {
         layoutUbicacion  = v.findViewById(R.id.layout_ubicacion);
         layoutFecha      = v.findViewById(R.id.layout_fecha);
         layoutHora       = v.findViewById(R.id.layout_hora);
-
         ddTipoResiduo    = v.findViewById(R.id.dd_tipo_residuo);
         ddUnidad         = v.findViewById(R.id.dd_unidad);
         ddUbicacion      = v.findViewById(R.id.dd_ubicacion);
@@ -132,23 +141,21 @@ public class RegistroFragment extends Fragment {
         edtCategoria     = v.findViewById(R.id.edt_categoria);
         btnGuardar       = v.findViewById(R.id.btn_guardar);
         btnLimpiar       = v.findViewById(R.id.btn_limpiar);
-
-        // Foto
         imgFotoResiduo   = v.findViewById(R.id.img_foto_residuo);
-        btnCamara        = v.findViewById(R.id.btn_camara);
-        btnGaleria       = v.findViewById(R.id.btn_galeria);
+        btnFoto          = v.findViewById(R.id.btn_foto);
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  DROPDOWNS
+    // ══════════════════════════════════════════════════════════════════════════
 
     private void configurarDropdowns() {
         listaResiduos = db.obtenerTodosResiduos();
         List<String> nombres = new ArrayList<>();
         for (Residuo r : listaResiduos) nombres.add(r.getNombre());
 
-        ArrayAdapter<String> adapterTipo = new ArrayAdapter<>(
-                requireContext(),
-                android.R.layout.simple_dropdown_item_1line,
-                nombres);
-        ddTipoResiduo.setAdapter(adapterTipo);
+        ddTipoResiduo.setAdapter(new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_dropdown_item_1line, nombres));
 
         ddTipoResiduo.setOnItemClickListener((parent, view, pos, id) -> {
             residuoSeleccionado = listaResiduos.get(pos);
@@ -170,94 +177,123 @@ public class RegistroFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, ZONAS));
     }
 
+    // ══════════════════════════════════════════════════════════════════════════
+    //  FECHA / HORA
+    // ══════════════════════════════════════════════════════════════════════════
+
     private void configurarFechaHora() {
         edtFecha.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
             new DatePickerDialog(requireContext(),
-                    (picker, year, month, day) -> {
-                        String fecha = String.format(Locale.getDefault(),
-                                "%04d-%02d-%02d", year, month + 1, day);
-                        edtFecha.setText(fecha);
-                    },
-                    cal.get(Calendar.YEAR),
-                    cal.get(Calendar.MONTH),
+                    (p, y, m, d) -> edtFecha.setText(
+                            String.format(Locale.getDefault(), "%04d-%02d-%02d", y, m + 1, d)),
+                    cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show();
         });
 
         edtHora.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
             new TimePickerDialog(requireContext(),
-                    (picker, hour, minute) -> {
-                        String hora = String.format(Locale.getDefault(),
-                                "%02d:%02d", hour, minute);
-                        edtHora.setText(hora);
-                    },
-                    cal.get(Calendar.HOUR_OF_DAY),
-                    cal.get(Calendar.MINUTE),
-                    true).show();
+                    (p, h, min) -> edtHora.setText(
+                            String.format(Locale.getDefault(), "%02d:%02d", h, min)),
+                    cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show();
         });
     }
 
     private void setFechaHoraActual() {
-        String fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        String hora  = new SimpleDateFormat("HH:mm",      Locale.getDefault()).format(new Date());
-        edtFecha.setText(fecha);
-        edtHora.setText(hora);
+        edtFecha.setText(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date()));
+        edtHora.setText(new SimpleDateFormat("HH:mm",      Locale.getDefault()).format(new Date()));
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  BOTONES
+    // ══════════════════════════════════════════════════════════════════════════
 
     private void configurarBotones() {
         btnGuardar.setOnClickListener(v -> guardarRegistro());
         btnLimpiar.setOnClickListener(v -> limpiarFormulario());
+        btnFoto.setOnClickListener(v -> mostrarDialogoFoto());
+    }
 
-        btnCamara.setOnClickListener(v -> {
-            if (ContextCompat.checkSelfPermission(requireContext(),
-                    android.Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_GRANTED) {
-                abrirCamara();
-            } else {
-                launcherPermisoCamara.launch(android.Manifest.permission.CAMERA);
-            }
-        });
+    private void mostrarDialogoFoto() {
+        String[] opciones = rutaFotoGuardada.isEmpty()
+                ? new String[]{"Tomar foto", "Seleccionar de galería"}
+                : new String[]{"Tomar foto", "Seleccionar de galería", "Eliminar foto"};
 
-        btnGaleria.setOnClickListener(v -> launcherGaleria.launch("image/*"));
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Foto del residuo")
+                .setItems(opciones, (dialog, which) -> {
+                    if (which == 0) pedirPermisoCamara();
+                    else if (which == 1) launcherGaleria.launch("image/*");
+                    else eliminarFoto();
+                }).show();
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  CÁMARA — manejo correcto de FileProvider
+    // ══════════════════════════════════════════════════════════════════════════
+
+    private void pedirPermisoCamara() {
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            abrirCamara();
+        } else {
+            launcherPermiso.launch(Manifest.permission.CAMERA);
+        }
     }
 
     private void abrirCamara() {
         try {
-            File foto = crearArchivoFoto();
-            fotoUri = FileProvider.getUriForFile(
+            File archivo = crearArchivoFoto();
+            // URI segura a través de FileProvider (evita el crash de FileUriExposedException)
+            uriFotoTemporal = FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().getPackageName() + ".provider",
-                    foto);
-            launcherCamara.launch(fotoUri);
+                    archivo);
+            launcherCamara.launch(uriFotoTemporal);
         } catch (IOException e) {
-            Toast.makeText(requireContext(),
-                    "Error al abrir cámara", Toast.LENGTH_SHORT).show();
+            toast("Error al preparar la cámara: " + e.getMessage());
         }
     }
 
     private File crearArchivoFoto() throws IOException {
-        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        String nombre = "ECOLIM_" + timestamp;
-        File dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File foto = File.createTempFile(nombre, ".jpg", dir);
-        rutaFotoActual = foto.getAbsolutePath();
-        return foto;
+        String ts  = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+        File   dir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if (dir != null && !dir.exists()) dir.mkdirs();
+        return File.createTempFile("ECOLIM_" + ts, ".jpg", dir);
     }
+
+    private void mostrarFoto(Uri uri) {
+        try {
+            imgFotoResiduo.setImageURI(null);   // limpiar caché antes
+            imgFotoResiduo.setImageURI(uri);
+            btnFoto.setText("Cambiar foto");
+        } catch (Exception e) {
+            toast("No se pudo mostrar la imagen");
+        }
+    }
+
+    private void eliminarFoto() {
+        rutaFotoGuardada = "";
+        uriFotoTemporal  = null;
+        imgFotoResiduo.setImageResource(android.R.drawable.ic_menu_camera);
+        btnFoto.setText("Agregar foto");
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  GUARDAR REGISTRO
+    // ══════════════════════════════════════════════════════════════════════════
 
     private void guardarRegistro() {
         if (residuoSeleccionado == null) {
-            layoutTipo.setError("Seleccione el tipo de residuo");
-            return;
+            layoutTipo.setError("Seleccione el tipo de residuo"); return;
         }
         layoutTipo.setError(null);
 
         String cantidadStr = txt(edtCantidad);
         if (cantidadStr.isEmpty()) {
             layoutCantidad.setError("Ingrese la cantidad");
-            edtCantidad.requestFocus();
-            return;
+            edtCantidad.requestFocus(); return;
         }
         layoutCantidad.setError(null);
 
@@ -266,61 +302,51 @@ public class RegistroFragment extends Fragment {
             cantidad = Double.parseDouble(cantidadStr);
             if (cantidad <= 0) throw new NumberFormatException();
         } catch (NumberFormatException e) {
-            layoutCantidad.setError("Cantidad inválida");
-            return;
+            layoutCantidad.setError("Cantidad inválida"); return;
         }
 
         String unidad = ddUnidad.getText().toString().trim();
-        if (unidad.isEmpty()) {
-            layoutUnidad.setError("Seleccione la unidad");
-            return;
-        }
+        if (unidad.isEmpty()) { layoutUnidad.setError("Seleccione la unidad"); return; }
         layoutUnidad.setError(null);
 
         String ubicacion = ddUbicacion.getText().toString().trim();
-        if (ubicacion.isEmpty()) {
-            layoutUbicacion.setError("Seleccione o escriba la ubicación");
-            return;
-        }
+        if (ubicacion.isEmpty()) { layoutUbicacion.setError("Seleccione la ubicación"); return; }
         layoutUbicacion.setError(null);
 
         String fecha = txt(edtFecha);
         String hora  = txt(edtHora);
-        if (fecha.isEmpty() || hora.isEmpty()) {
-            Toast.makeText(requireContext(),
-                    "Indique fecha y hora", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (fecha.isEmpty() || hora.isEmpty()) { toast("Indique fecha y hora"); return; }
 
-        Usuario u = db.obtenerUsuarioPorId(usuarioId);
+        Usuario u      = db.obtenerUsuarioPorId(usuarioId);
         String nombreU = u != null ? u.getNombreCompleto() : "Desconocido";
 
         Registro registro = new Registro(
-                usuarioId,
-                nombreU,
+                usuarioId, nombreU,
                 residuoSeleccionado.getId(),
                 residuoSeleccionado.getNombre(),
                 residuoSeleccionado.getCategoria(),
-                cantidad,
-                unidad,
-                ubicacion,
+                cantidad, unidad, ubicacion,
                 txt(edtObservaciones),
-                fecha,
-                hora,
-                rutaFotoActual  // ← aquí se guarda la ruta de la foto
+                fecha, hora,
+                rutaFotoGuardada   // URI de la foto para mostrar en Historial/Reportes
         );
 
         long id = db.insertarRegistro(registro);
 
         if (id != -1) {
-            Toast.makeText(requireContext(),
-                    "Registro guardado exitosamente", Toast.LENGTH_SHORT).show();
+            registro.setId(id);
+            // ✅ Análisis ML — detecta exceso/peligro → alerta WhatsApp automática
+            AlertaMLService.get(requireContext()).analizar(registro);
+            toast("Registro guardado exitosamente");
             limpiarFormulario();
         } else {
-            Toast.makeText(requireContext(),
-                    "Error al guardar. Intente nuevamente.", Toast.LENGTH_SHORT).show();
+            toast("Error al guardar. Intente nuevamente.");
         }
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  LIMPIAR
+    // ══════════════════════════════════════════════════════════════════════════
 
     private void limpiarFormulario() {
         ddTipoResiduo.setText("");
@@ -330,18 +356,20 @@ public class RegistroFragment extends Fragment {
         edtObservaciones.setText("");
         edtCategoria.setText("");
         residuoSeleccionado = null;
-        rutaFotoActual = "";
-        fotoUri = null;
-        imgFotoResiduo.setImageResource(android.R.drawable.ic_menu_camera);
         layoutCategoria.setBackgroundColor(0x00000000);
         setFechaHoraActual();
         layoutTipo.setError(null);
         layoutCantidad.setError(null);
         layoutUnidad.setError(null);
         layoutUbicacion.setError(null);
+        eliminarFoto();
     }
 
     private String txt(TextInputEditText e) {
         return e.getText() == null ? "" : e.getText().toString().trim();
+    }
+
+    private void toast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }

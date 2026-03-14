@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- FOTO GRANDE (se oculta si no hay foto) -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_detalle_foto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp">
+
+            <ImageView
+                android:id="@+id/img_detalle_foto"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@android:drawable/ic_menu_camera" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- DATOS DEL REGISTRO -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp">
+
+            <!-- Tipo -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tipo de residuo"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_tipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Categoría -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categoría"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_categoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Cantidad -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cantidad"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_cantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Ubicación -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Zona de recolección"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_ubicacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Fecha y hora -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha y hora"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_fecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Registrado por -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registrado por"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_usuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#333333"
+                android:layout_marginBottom="10dp" />
+
+            <!-- Estado y Sync en fila -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Estado"
+                        android:textSize="11sp"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="2dp" />
+                    <TextView
+                        android:id="@+id/txt_det_estado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#333333" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sincronización"
+                        android:textSize="11sp"
+                        android:textColor="#2E7D32"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="2dp" />
+                    <TextView
+                        android:id="@+id/txt_det_sync"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textColor="#333333" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Observaciones -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Observaciones"
+                android:textSize="11sp"
+                android:textColor="#2E7D32"
+                android:textStyle="bold"
+                android:layout_marginBottom="2dp" />
+            <TextView
+                android:id="@+id/txt_det_obs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="#555555"
+                android:background="#F9F9F9"
+                android:padding="8dp" />
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

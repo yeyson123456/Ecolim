@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
     android:layout_marginBottom="10dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="3dp"
@@ -14,13 +15,14 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <!-- Barra de color lateral -->
+        <!-- Barra de color lateral según categoría -->
         <View
             android:id="@+id/view_color_bar"
-            android:layout_width="5dp"
+            android:layout_width="6dp"
             android:layout_height="match_parent"
             android:background="#4CAF50" />
 
+        <!-- Contenido principal -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,11 +30,12 @@
             android:orientation="vertical"
             android:padding="12dp">
 
+            <!-- Fila 1: Tipo + Sync -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_vertical">
+                android:layout_marginBottom="4dp">
 
                 <TextView
                     android:id="@+id/txt_tipo"
@@ -41,89 +44,97 @@
                     android:layout_weight="1"
                     android:textSize="15sp"
                     android:textStyle="bold"
-                    android:textColor="#1A1A2E" />
-
-                <TextView
-                    android:id="@+id/txt_cantidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:textColor="#2E7D32" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/txt_categoria"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="11sp"
-                android:textColor="#757575"
-                android:layout_marginTop="2dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="6dp">
-
-                <TextView
-                    android:id="@+id/txt_ubicacion"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="12sp"
-                    android:textColor="#555555" />
-
-                <TextView
-                    android:id="@+id/txt_fecha_hora"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="11sp"
-                    android:textColor="#9E9E9E" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginTop="4dp">
-
-                <TextView
-                    android:id="@+id/txt_usuario"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="11sp"
-                    android:textColor="#9E9E9E" />
+                    android:textColor="#1B5E20" />
 
                 <TextView
                     android:id="@+id/txt_sync"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="11sp"
-                    android:textColor="#E65100" />
-
+                    android:textColor="#2E7D32" />
             </LinearLayout>
 
+            <!-- Fila 2: Categoría -->
+            <TextView
+                android:id="@+id/txt_categoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#757575"
+                android:layout_marginBottom="6dp" />
+
+            <!-- Fila 3: Miniatura de foto + datos -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="6dp">
+
+                <!-- ✅ MINIATURA DE FOTO -->
+                <ImageView
+                    android:id="@+id/img_miniatura_foto"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginEnd="12dp"
+                    android:scaleType="centerCrop"
+                    android:background="#F5F5F5"
+                    android:src="@android:drawable/ic_menu_camera" />
+
+                <!-- Datos del registro -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_cantidad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="#000000"
+                        android:layout_marginBottom="3dp" />
+
+                    <TextView
+                        android:id="@+id/txt_ubicacion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="#555555"
+                        android:drawablePadding="4dp"
+                        android:layout_marginBottom="3dp" />
+
+                    <TextView
+                        android:id="@+id/txt_fecha_hora"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="#757575"
+                        android:layout_marginBottom="3dp" />
+
+                    <TextView
+                        android:id="@+id/txt_usuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="11sp"
+                        android:textColor="#9E9E9E" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Botón eliminar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_eliminar"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="end"
+                android:text="Eliminar"
+                android:textColor="#F44336"
+                android:textSize="12sp"
+                app:iconTint="#F44336"
+                app:icon="@android:drawable/ic_menu_delete" />
+
         </LinearLayout>
-
-        <!-- Botón eliminar -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_eliminar"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="40dp"
-            android:layout_height="match_parent"
-            android:minWidth="0dp"
-            android:paddingStart="0dp"
-            android:paddingEnd="0dp"
-            app:icon="@android:drawable/ic_menu_delete"
-            app:iconTint="#EF5350"
-            app:iconSize="20dp" />
-
     </LinearLayout>
-
 </androidx.cardview.widget.CardView>
