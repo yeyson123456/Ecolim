@@ -43,7 +43,6 @@
                 android:textSize="13sp"
                 android:textColor="#A5D6A7"
                 android:layout_marginTop="4dp" />
-
         </LinearLayout>
 
         <!-- Card formulario -->
@@ -71,7 +70,7 @@
                     android:textColor="#1B5E20"
                     android:layout_marginBottom="20dp" />
 
-                <!-- Campo Email -->
+                <!-- Email -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_email"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -84,7 +83,6 @@
                     app:hintTextColor="#2E7D32"
                     app:startIconDrawable="@android:drawable/sym_action_email"
                     app:startIconTint="#2E7D32">
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_email"
                         android:layout_width="match_parent"
@@ -94,10 +92,9 @@
                         android:textColor="#000000"
                         android:textColorHint="#9E9E9E"
                         android:background="@android:color/transparent" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Campo Contraseña -->
+                <!-- Contraseña -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_password"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -112,7 +109,6 @@
                     app:endIconTint="#2E7D32"
                     app:startIconDrawable="@android:drawable/ic_lock_lock"
                     app:startIconTint="#2E7D32">
-
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_password"
                         android:layout_width="match_parent"
@@ -122,9 +118,9 @@
                         android:textColor="#000000"
                         android:textColorHint="#9E9E9E"
                         android:background="@android:color/transparent" />
-
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <!-- Recordar sesión -->
                 <CheckBox
                     android:id="@+id/chk_recordar"
                     android:layout_width="wrap_content"
@@ -135,6 +131,7 @@
                     android:buttonTint="#2E7D32"
                     android:layout_marginBottom="20dp" />
 
+                <!-- Botón ingresar -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_ingresar"
                     android:layout_width="match_parent"
@@ -146,12 +143,51 @@
                     app:backgroundTint="#2E7D32"
                     app:cornerRadius="12dp" />
 
+                <!-- Separador -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="16dp">
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="#E0E0E0" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  ¿No tienes cuenta?  "
+                        android:textSize="12sp"
+                        android:textColor="#9E9E9E" />
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="#E0E0E0" />
+                </LinearLayout>
+
+                <!-- Botón registrarse -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_registrarse"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Crear cuenta nueva"
+                    android:textSize="15sp"
+                    android:textColor="#2E7D32"
+                    app:strokeColor="#2E7D32"
+                    app:cornerRadius="12dp"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconTint="#2E7D32" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="16dp"
-                    android:text="Demo: admin@ecolim.com / admin123"
                     android:textSize="11sp"
                     android:textColor="#9E9E9E" />
 
@@ -162,7 +198,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="© 2025 ECOLIM S.A.C."
+            android:text="© 2026 ECOLIM S.A.C."
             android:textSize="10sp"
             android:textColor="#9E9E9E" />
 

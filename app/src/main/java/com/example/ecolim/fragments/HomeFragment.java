@@ -283,7 +283,7 @@ public class HomeFragment extends Fragment {
                             "%.1f %s", r.getCantidad(), r.getUnidad()));
             ((TextView) item.findViewById(R.id.txt_ubicacion))
                     .setText(r.getUbicacion());
-            ((TextView) item.findViewById(R.id.txt_hora))
+            ((TextView) item.findViewById(R.id.txt_time))
                     .setText(r.getHora());
 
             item.findViewById(R.id.view_color_bar)

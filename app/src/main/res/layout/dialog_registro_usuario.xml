@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- Nombre -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Nombre *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_nombre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textCapWords"
+                android:textColor="#000000"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Apellido -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Apellido *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_apellido"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textCapWords"
+                android:textColor="#000000"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- DNI -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="DNI *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_dni"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="8"
+                android:textColor="#000000"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Cargo -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_reg_cargo"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Cargo *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32">
+            <AutoCompleteTextView
+                android:id="@+id/dd_reg_cargo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:focusable="false"
+                android:textColor="#000000" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Teléfono WhatsApp -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_reg_telefono"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:hint="Teléfono WhatsApp *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32"
+            app:startIconDrawable="@android:drawable/sym_action_call"
+            app:startIconTint="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_telefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:textColor="#000000"
+                android:hint="" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="11sp"
+            android:textColor="#E65100"
+            android:layout_marginBottom="12dp"
+            android:paddingStart="4dp" />
+
+        <!-- Email -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_reg_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Correo electrónico *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32"
+            app:startIconDrawable="@android:drawable/sym_action_email"
+            app:startIconTint="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="#000000"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_reg_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:hint="Contraseña * (mín. 6 caracteres)"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32"
+            app:endIconMode="password_toggle"
+            app:endIconTint="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="#000000"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Confirmar contraseña -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_reg_password2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:hint="Confirmar contraseña *"
+            app:boxStrokeColor="#2E7D32"
+            app:hintTextColor="#2E7D32"
+            app:endIconMode="password_toggle"
+            app:endIconTint="#2E7D32">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_reg_password2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="#000000"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+</ScrollView>
