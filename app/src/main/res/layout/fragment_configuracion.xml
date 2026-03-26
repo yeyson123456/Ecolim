@@ -875,6 +875,46 @@
 
             </LinearLayout>
 
+
+            <!-- ═══════════════════════════════════════════════════════════
+                 HERRAMIENTAS  (sección nueva)
+            ══════════════════════════════════════════════════════════════ -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="HERRAMIENTAS"
+                android:textSize="11sp"
+                android:textColor="?attr/colorSecondary"
+                android:textStyle="bold"
+                android:letterSpacing="0.08"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="6dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/bg_card_config"
+                android:elevation="2dp">
+
+                <!-- Mapa de zonas -->
+                <include layout="@layout/item_config_row" android:id="@+id/row_ver_mapa" />
+
+                <View android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="?attr/colorOnSurface" android:alpha="0.08"
+                    android:layout_marginLeft="56dp" />
+
+                <!-- Generar QR -->
+                <include layout="@layout/item_config_row" android:id="@+id/row_generar_qr" />
+
+            </LinearLayout>
+
+            <!-- FIN SECCIÓN HERRAMIENTAS -->
+
             <!-- ═══════════════════════════════════════════════════════════
                  8. ACERCA DE
             ══════════════════════════════════════════════════════════════ -->

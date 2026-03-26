@@ -3,6 +3,7 @@ package com.example.ecolim.fragments;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
@@ -23,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.ecolim.AlertaMLService;
 import com.example.ecolim.R;
+import com.example.ecolim.activities.ScannerActivity;
 import com.example.ecolim.database.EcolimDbHelper;
 import com.example.ecolim.models.Registro;
 import com.example.ecolim.models.Residuo;
@@ -48,18 +51,16 @@ public class RegistroFragment extends Fragment {
     private List<Residuo>  listaResiduos;
     private Residuo        residuoSeleccionado;
 
-    // ── Foto ──────────────────────────────────────────────────────────────────
     private ImageView imgFotoResiduo;
     private Uri       uriFotoTemporal;
     private String    rutaFotoGuardada = "";
 
-    // ── Campos ────────────────────────────────────────────────────────────────
     private TextInputLayout      layoutTipo, layoutCategoria, layoutCantidad,
             layoutUnidad, layoutUbicacion, layoutFecha, layoutHora;
     private AutoCompleteTextView ddTipoResiduo, ddUnidad, ddUbicacion;
     private TextInputEditText    edtCantidad, edtFecha, edtHora,
             edtObservaciones, edtCategoria;
-    private MaterialButton       btnGuardar, btnLimpiar, btnFoto;
+    private MaterialButton       btnGuardar, btnLimpiar, btnFoto, btnQR;
 
     private static final String[] ZONAS = {
             "Área de Producción", "Área Administrativa", "Almacén General",
@@ -68,10 +69,7 @@ public class RegistroFragment extends Fragment {
             "Sala de Reuniones", "Pasillo Principal", "Otra zona"
     };
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  LAUNCHERS (registrar antes de onCreateView)
-    // ══════════════════════════════════════════════════════════════════════════
-
+    // Launcher cámara
     private final ActivityResultLauncher<Uri> launcherCamara =
             registerForActivityResult(new ActivityResultContracts.TakePicture(), exito -> {
                 if (exito && uriFotoTemporal != null) {
@@ -81,12 +79,13 @@ public class RegistroFragment extends Fragment {
                 }
             });
 
+    // Launcher galería
     private final ActivityResultLauncher<String> launcherGaleria =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
                         requireContext().getContentResolver().takePersistableUriPermission(
-                                uri, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                     } catch (Exception ignored) {}
                     rutaFotoGuardada = uri.toString();
                     mostrarFoto(uri);
@@ -94,15 +93,18 @@ public class RegistroFragment extends Fragment {
                 }
             });
 
+    // Launcher permiso cámara
     private final ActivityResultLauncher<String> launcherPermiso =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), ok -> {
                 if (ok) abrirCamara();
                 else toast("Permiso de cámara denegado");
             });
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  LIFECYCLE
-    // ══════════════════════════════════════════════════════════════════════════
+    // ✅ Launcher escáner QR
+    private final ActivityResultLauncher<Intent> launcherQR =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    this::onQRResultado);
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,10 +120,6 @@ public class RegistroFragment extends Fragment {
         setFechaHoraActual();
         return view;
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    //  VISTAS
-    // ══════════════════════════════════════════════════════════════════════════
 
     private void iniciarVistas(View v) {
         layoutTipo       = v.findViewById(R.id.layout_tipo_residuo);
@@ -143,11 +141,8 @@ public class RegistroFragment extends Fragment {
         btnLimpiar       = v.findViewById(R.id.btn_limpiar);
         imgFotoResiduo   = v.findViewById(R.id.img_foto_residuo);
         btnFoto          = v.findViewById(R.id.btn_foto);
+        btnQR            = v.findViewById(R.id.btn_qr); // ✅ NUEVO
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    //  DROPDOWNS
-    // ══════════════════════════════════════════════════════════════════════════
 
     private void configurarDropdowns() {
         listaResiduos = db.obtenerTodosResiduos();
@@ -177,10 +172,6 @@ public class RegistroFragment extends Fragment {
                 android.R.layout.simple_dropdown_item_1line, ZONAS));
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  FECHA / HORA
-    // ══════════════════════════════════════════════════════════════════════════
-
     private void configurarFechaHora() {
         edtFecha.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
@@ -190,7 +181,6 @@ public class RegistroFragment extends Fragment {
                     cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)).show();
         });
-
         edtHora.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
             new TimePickerDialog(requireContext(),
@@ -205,21 +195,72 @@ public class RegistroFragment extends Fragment {
         edtHora.setText(new SimpleDateFormat("HH:mm",      Locale.getDefault()).format(new Date()));
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    //  BOTONES
-    // ══════════════════════════════════════════════════════════════════════════
-
     private void configurarBotones() {
         btnGuardar.setOnClickListener(v -> guardarRegistro());
         btnLimpiar.setOnClickListener(v -> limpiarFormulario());
         btnFoto.setOnClickListener(v -> mostrarDialogoFoto());
+        btnQR.setOnClickListener(v -> abrirEscaner()); // ✅ NUEVO
     }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  ESCÁNER QR
+    // ══════════════════════════════════════════════════════════════════════════
+
+    private void abrirEscaner() {
+        launcherQR.launch(new Intent(requireActivity(), ScannerActivity.class));
+    }
+
+    private void onQRResultado(ActivityResult result) {
+        if (result.getResultCode() != android.app.Activity.RESULT_OK
+                || result.getData() == null) return;
+
+        String tipoResiduo = result.getData().getStringExtra(ScannerActivity.EXTRA_TIPO);
+        String textoQR     = result.getData().getStringExtra(ScannerActivity.EXTRA_RESULTADO);
+
+        if (tipoResiduo != null && !tipoResiduo.isEmpty()) {
+            seleccionarResiduoPorNombre(tipoResiduo);
+        } else if (textoQR != null && !textoQR.isEmpty()) {
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("QR leído")
+                    .setMessage("Código: " + textoQR
+                            + "\n\nNo coincide con ningún tipo de residuo.\n"
+                            + "¿Deseas agregarlo como observación?")
+                    .setPositiveButton("Agregar a observaciones", (d, w) ->
+                            edtObservaciones.setText("QR: " + textoQR))
+                    .setNegativeButton("Ignorar", null)
+                    .show();
+        }
+    }
+
+    private void seleccionarResiduoPorNombre(String nombre) {
+        for (Residuo r : listaResiduos) {
+            if (r.getNombre().equalsIgnoreCase(nombre)) {
+                residuoSeleccionado = r;
+                ddTipoResiduo.setText(r.getNombre(), false);
+                edtCategoria.setText(r.getCategoria());
+                int color;
+                switch (r.getCategoria()) {
+                    case "Peligroso": color = 0xFFFFFDE7; break;
+                    case "Especial":  color = 0xFFF3E5F5; break;
+                    default:          color = 0xFFE8F5E9; break;
+                }
+                layoutCategoria.setBackgroundColor(color);
+                layoutTipo.setError(null);
+                toast("Residuo detectado: " + r.getNombre());
+                return;
+            }
+        }
+        toast("Tipo \"" + nombre + "\" no encontrado. Selecciónalo manualmente.");
+    }
+
+    // ══════════════════════════════════════════════════════════════════════════
+    //  FOTO
+    // ══════════════════════════════════════════════════════════════════════════
 
     private void mostrarDialogoFoto() {
         String[] opciones = rutaFotoGuardada.isEmpty()
                 ? new String[]{"Tomar foto", "Seleccionar de galería"}
                 : new String[]{"Tomar foto", "Seleccionar de galería", "Eliminar foto"};
-
         new MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Foto del residuo")
                 .setItems(opciones, (dialog, which) -> {
@@ -228,10 +269,6 @@ public class RegistroFragment extends Fragment {
                     else eliminarFoto();
                 }).show();
     }
-
-    // ══════════════════════════════════════════════════════════════════════════
-    //  CÁMARA — manejo correcto de FileProvider
-    // ══════════════════════════════════════════════════════════════════════════
 
     private void pedirPermisoCamara() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
@@ -245,7 +282,6 @@ public class RegistroFragment extends Fragment {
     private void abrirCamara() {
         try {
             File archivo = crearArchivoFoto();
-            // URI segura a través de FileProvider (evita el crash de FileUriExposedException)
             uriFotoTemporal = FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().getPackageName() + ".provider",
@@ -265,7 +301,7 @@ public class RegistroFragment extends Fragment {
 
     private void mostrarFoto(Uri uri) {
         try {
-            imgFotoResiduo.setImageURI(null);   // limpiar caché antes
+            imgFotoResiduo.setImageURI(null);
             imgFotoResiduo.setImageURI(uri);
             btnFoto.setText("Cambiar foto");
         } catch (Exception e) {
@@ -281,7 +317,7 @@ public class RegistroFragment extends Fragment {
     }
 
     // ══════════════════════════════════════════════════════════════════════════
-    //  GUARDAR REGISTRO
+    //  GUARDAR
     // ══════════════════════════════════════════════════════════════════════════
 
     private void guardarRegistro() {
@@ -328,14 +364,12 @@ public class RegistroFragment extends Fragment {
                 cantidad, unidad, ubicacion,
                 txt(edtObservaciones),
                 fecha, hora,
-                rutaFotoGuardada   // URI de la foto para mostrar en Historial/Reportes
+                rutaFotoGuardada
         );
 
         long id = db.insertarRegistro(registro);
-
         if (id != -1) {
             registro.setId(id);
-            // ✅ Análisis ML — detecta exceso/peligro → alerta WhatsApp automática
             AlertaMLService.get(requireContext()).analizar(registro);
             toast("Registro guardado exitosamente");
             limpiarFormulario();

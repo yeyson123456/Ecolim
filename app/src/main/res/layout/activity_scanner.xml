@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#000000">
+
+    <!-- ── Toolbar ── -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#1B5E20">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_scanner"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1B5E20"
+            app:title="Escanear Residuo"
+            app:titleTextColor="#FFFFFF"
+            app:subtitle="Apunta la cámara al código QR"
+            app:subtitleTextColor="#A5D6A7"
+            app:navigationIcon="@android:drawable/ic_menu_close_clear_cancel"
+            app:navigationIconTint="#FFFFFF" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- ── Escáner (ocupa todo el espacio disponible) ── -->
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/scanner_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- ── Panel inferior con diseño mejorado ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1B5E20"
+        android:paddingTop="20dp"
+        android:paddingBottom="28dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:gravity="center">
+
+        <!-- Ícono QR grande -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="▣"
+            android:textSize="48sp"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="10dp" />
+
+        <!-- Instrucción principal -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Centra el código QR en el recuadro"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Instrucción secundaria -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="El escáner identifica automáticamente el tipo de residuo"
+            android:textSize="12sp"
+            android:textColor="#A5D6A7"
+            android:gravity="center"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Divisor -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#2E7D32"
+            android:layout_marginBottom="20dp" />
+
+        <!-- Fila de botones -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <!-- Cancelar -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_cancelar_scan"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
+                android:text="Cancelar"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                app:strokeColor="#FFFFFF"
+                app:cornerRadius="26dp"
+                app:icon="@android:drawable/ic_menu_close_clear_cancel"
+                app:iconTint="#FFFFFF"
+                app:iconSize="18dp" />
+
+            <!-- Linterna -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_linterna"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:text="Linterna"
+                android:textColor="#1B5E20"
+                android:textSize="14sp"
+                app:backgroundTint="#FFFFFF"
+                app:cornerRadius="26dp"
+                app:icon="@android:drawable/ic_menu_compass"
+                app:iconTint="#1B5E20"
+                app:iconSize="18dp" />
+
+        </LinearLayout>
+
+        <!-- Tip -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tip: activa la linterna en lugares oscuros"
+            android:textSize="11sp"
+            android:textColor="#4CAF50"
+            android:gravity="center"
+            android:layout_marginTop="14dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

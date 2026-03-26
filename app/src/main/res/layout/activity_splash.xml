@@ -4,51 +4,104 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="#1B5E20"
-    android:padding="32dp">
+    android:background="#1B5E20">
 
+    <!-- Espacio superior -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Logo ECOLIM -->
     <ImageView
-        android:id="@+id/img_logo"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:src="@drawable/ic_ecolim_logo"
-        android:contentDescription="Logo ECOLIM" />
+        android:contentDescription="Logo ECOLIM"
+        android:layout_marginBottom="24dp" />
 
+    <!-- Nombre de la app -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ECOLIM"
-        android:textSize="44sp"
+        android:textSize="42sp"
         android:textStyle="bold"
         android:textColor="#FFFFFF"
         android:letterSpacing="0.2"
-        android:layout_marginTop="16dp" />
+        android:layout_marginBottom="6dp" />
 
+    <!-- Subtítulo -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="S.A.C."
-        android:textSize="16sp"
+        android:text="Gestión de Residuos Sólidos"
+        android:textSize="15sp"
         android:textColor="#A5D6A7"
-        android:letterSpacing="0.3" />
+        android:layout_marginBottom="8dp" />
 
-    <TextView
-        android:id="@+id/txt_slogan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Gestión inteligente de residuos sólidos"
-        android:textSize="14sp"
-        android:textColor="#C8E6C9"
-        android:gravity="center"
-        android:layout_marginTop="24dp"
-        android:alpha="0" />
-
+    <!-- Norma técnica -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="v1.0.0"
+        android:text="NTP 900.058"
         android:textSize="12sp"
-        android:textColor="#81C784"
-        android:layout_marginTop="48dp" />
+        android:textColor="#4CAF50"
+        android:layout_marginBottom="48dp" />
+
+    <!-- Barra de progreso -->
+    <ProgressBar
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:indeterminateTint="#A5D6A7"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Estado dinámico (Verificando sesión...) -->
+    <TextView
+        android:id="@+id/txt_splash_estado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cargando..."
+        android:textSize="13sp"
+        android:textColor="#81C784" />
+
+    <!-- Espacio inferior -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <!-- Footer empresa -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <View
+            android:layout_width="60dp"
+            android:layout_height="1dp"
+            android:background="#2E7D32"
+            android:layout_marginBottom="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ECOLIM S.A.C."
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textColor="#4CAF50"
+            android:layout_marginBottom="2dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="© 2025 Todos los derechos reservados"
+            android:textSize="10sp"
+            android:textColor="#2E7D32" />
+
+    </LinearLayout>
 
 </LinearLayout>

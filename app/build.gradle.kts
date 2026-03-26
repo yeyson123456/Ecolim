@@ -78,7 +78,13 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:3.17") {
         exclude(group = "org.apache.xmlbeans", module = "xmlbeans")
     }
-
     // Biometria (ConfiguracionFragment)
     implementation("androidx.biometric:biometric:1.1.0")
+    //Generar QR
+    implementation("com.google.zxing:core:3.5.2")
+    //Escáner QR
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    // ✅ OpenStreetMap
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
+
 }

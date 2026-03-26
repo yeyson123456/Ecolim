@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F1F8E9">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1B5E20"
+            app:title="Mapa de Zonas"
+            app:titleTextColor="#FFFFFF"
+            app:subtitle="Distribución de residuos"
+            app:subtitleTextColor="#A5D6A7" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Barra de filtros + contador -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/txt_zonas_contador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 zonas"
+            android:textSize="13sp"
+            android:textColor="#555555"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Chips de filtro -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chip_group_filtros"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:singleSelection="true"
+            app:selectionRequired="true" />
+
+    </LinearLayout>
+
+    <!-- Leyenda de colores -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#F9FBE7"
+        android:paddingVertical="6dp"
+        android:paddingHorizontal="16dp">
+
+        <!-- Verde -->
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="#4CAF50"
+            android:layout_marginEnd="4dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Normal"
+            android:textSize="11sp"
+            android:textColor="#4CAF50"
+            android:layout_marginEnd="12dp" />
+
+        <!-- Naranja -->
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="#FF9800"
+            android:layout_marginEnd="4dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Precaución"
+            android:textSize="11sp"
+            android:textColor="#FF9800"
+            android:layout_marginEnd="12dp" />
+
+        <!-- Rojo -->
+        <View
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:background="#F44336"
+            android:layout_marginEnd="4dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alerta"
+            android:textSize="11sp"
+            android:textColor="#F44336" />
+
+    </LinearLayout>
+
+    <!-- Mapa OSMDroid (ocupa todo el espacio restante) -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <org.osmdroid.views.MapView
+            android:id="@+id/map_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Botón mi ubicación (flotante sobre el mapa) -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_mi_ubicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:src="@android:drawable/ic_menu_compass"
+            android:contentDescription="Mi ubicación"
+            app:backgroundTint="#2E7D32"
+            app:tint="#FFFFFF"
+            app:fabSize="normal" />
+
+    </FrameLayout>
+
+</LinearLayout>

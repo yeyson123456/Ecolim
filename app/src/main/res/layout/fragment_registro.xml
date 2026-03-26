@@ -43,15 +43,57 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
-                    <TextView
-                        android:layout_width="wrap_content"
+
+                    <!-- Título + botones QR en misma fila -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="TIPO DE RESIDUO"
-                        android:textSize="11sp"
-                        android:textColor="#2E7D32"
-                        android:textStyle="bold"
-                        android:letterSpacing="0.1"
-                        android:layout_marginBottom="12dp" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="TIPO DE RESIDUO"
+                            android:textSize="11sp"
+                            android:textColor="#2E7D32"
+                            android:textStyle="bold"
+                            android:letterSpacing="0.1" />
+
+                        <!-- Escanear QR -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_qr"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="34dp"
+                            android:layout_marginEnd="6dp"
+                            android:text="Escanear"
+                            android:textSize="11sp"
+                            android:textColor="#2E7D32"
+                            app:strokeColor="#2E7D32"
+                            app:cornerRadius="17dp"
+                            app:icon="@android:drawable/ic_menu_camera"
+                            app:iconTint="#2E7D32"
+                            app:iconSize="14dp" />
+
+                        <!-- ✅ NUEVO — Ver/Generar QR -->
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btn_ver_qr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="34dp"
+                            android:text="Ver QR"
+                            android:textSize="11sp"
+                            android:textColor="#FFFFFF"
+                            app:backgroundTint="#2E7D32"
+                            app:cornerRadius="17dp"
+                            app:icon="@android:drawable/ic_menu_share"
+                            app:iconTint="#FFFFFF"
+                            app:iconSize="14dp" />
+
+                    </LinearLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_tipo_residuo"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -70,6 +112,7 @@
                             android:textColor="#000000"
                             android:textColorHint="#555555" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/layout_categoria"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -86,6 +129,7 @@
                             android:textColor="#000000"
                             android:maxLines="1" />
                     </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -329,8 +373,6 @@
                         android:textStyle="bold"
                         android:letterSpacing="0.1"
                         android:layout_marginBottom="12dp" />
-
-                    <!-- Imagen con borde redondeado -->
                     <ImageView
                         android:id="@+id/img_foto_residuo"
                         android:layout_width="match_parent"
@@ -340,8 +382,6 @@
                         android:background="#F5F5F5"
                         android:src="@android:drawable/ic_menu_camera"
                         android:padding="40dp" />
-
-                    <!-- Botón único que abre el diálogo opciones -->
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_foto"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -353,7 +393,6 @@
                         app:cornerRadius="10dp"
                         app:icon="@android:drawable/ic_menu_camera"
                         app:iconTint="#2E7D32" />
-
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

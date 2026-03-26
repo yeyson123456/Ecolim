@@ -6,12 +6,30 @@
     android:background="#F1F8E9"
     android:orientation="vertical">
 
+    <!-- ✅ TOOLBAR con ícono QR -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="#1B5E20"
+            app:title="ECOLIM S.A.C."
+            app:titleTextColor="#FFFFFF"
+            app:subtitleTextColor="#A5D6A7" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenedor de fragments -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
 
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -23,4 +41,3 @@
         app:menu="@menu/bottom_nav_menu" />
 
 </LinearLayout>
-
